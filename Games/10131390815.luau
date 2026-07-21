@@ -37,16 +37,15 @@ local Section = Tab:CreateSection("Settings")
 local Coins = {
    "Fortune Coin", "Ruby Coin", "Copper Coin", "Basic Coin",
    "Volt Coin", "Void Coin", "Starlight Coin", "Sapphire Coin",
-   "Prism Coin", "Galaxy Coin", "Fire Coin", "Eclipse Coin",
-   "Crimson Coin", "Chronos Coin", "Aether Coin", "Eclipse Coin",
+   "Prism Coin", "Galaxy Coin", "Fire Coin",
+   "Crimson Coin", "Chronos Coin", "Aether Coin",
    "Mirage Coin", "Paradox Coin", "Obsidian Coin", "Tempest Coin",
    "Miracle Coin", "Soul Coin", "Nexus Coin", "Infinity Coin", "Apex Coin"
 }
-local CoinLanded = game:GetService("ReplicatedStorage").Assets.Events.CoinLanded
+local Event = game:GetService("ReplicatedStorage").Assets.Events.CoinLanded
 local selectedCoin = Coins[1]
-local studs = 3
-local throwDelay = 1
-local autoThrow = false
+local time = 1
+local toggle = false
 
 local CoinDropdown = Tab:CreateDropdown({
    Name = "Coin Type",
@@ -57,36 +56,26 @@ local CoinDropdown = Tab:CreateDropdown({
    end
 })
 
-local StudsSlider = Tab:CreateSlider({
-   Name = "Distance (studs)",
-   Range = {1, 100},
-   Increment = 1,
-   Default = 3,
-   Callback = function(v)
-      studs = v
-   end
-})
-
-local DelaySlider = Tab:CreateSlider({
-   Name = "Auto Throw Delay (s)",
+local TimeSlider = Tab:CreateSlider({
+   Name = "Time",
    Range = {0.1, 5},
    Increment = 0.1,
    Default = 1,
    Callback = function(v)
-      throwDelay = v
+      time = v
    end
 })
 
-local AutoToggle = Tab:CreateToggle({
-   Name = "Auto Throw",
+Tab:CreateToggle({
+   Name = "Toggle",
    Default = false,
    Callback = function(v)
-      autoThrow = v
+      toggle = v
       if v then
          task.spawn(function()
-            while autoThrow do
-               CoinLanded:FireServer(studs, Vector3.new(0, 0, 0), selectedCoin)
-               task.wait(throwDelay)
+            while toggle do
+               Event:FireServer(3, Vector3.new(0, 0, 0), selectedCoin, nil, nil)
+               wait(time)
             end
          end)
       end
