@@ -3,11 +3,40 @@
 local HttpGet = game.HttpGet
 local GameId: number = game.GameId
 
-local Games: {[number]: string} = loadstring(
-  HttpGet(game, "https://raw.githubusercontent.com/liro-cc/liro-s-hub/main/game-list.luau")
-)() :: any
+local BASE = "https://raw.githubusercontent.com/liro-cc/liro-s-hub/main"
 
-local URL: string? = Games[GameId]
-if not URL then return end
+local function fetch(url: string): string?
+	local ok, result = pcall(HttpGet, game, url)
+	if ok then return result end
+	return nil
+end
 
-loadstring(HttpGet(game, URL))()
+local raw = fetch(BASE .. "/game-list.luau")
+if not raw then
+	warn("[Loader] Failed to fetch game list")
+	return
+end
+
+local ok, Games = pcall(loadstring, raw)
+if not ok or type(Games) ~= "function" then
+	warn("[Loader] Invalid game list")
+	return
+end
+
+local list: {[number]: string} = Games() :: any
+local URL: string? = list[GameId]
+if not URL then
+	warn(("[Loader] No script for game %d"):format(GameId))
+	return
+end
+
+local code = fetch(URL)
+if not code then
+	warn(("[Loader] Failed to fetch script for game %d"):format(GameId))
+	return
+end
+
+local ok, _ = pcall(loadstring, code)
+if not ok then
+	warn("[Loader] Failed to load game script")
+end
