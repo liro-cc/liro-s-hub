@@ -60,9 +60,11 @@ local SecondsSlider = Tab:CreateSlider({
    Name = "Seconds",
    Range = {0.1, 5},
    Increment = 0.1,
-   Default = 1,
-   Callback = function(v)
-      seconds = v
+   Suffix = "Seconds",
+   CurrentValue = 1,
+   Flag = "Slider1",
+   Callback = function(Value)
+      seconds = Value
    end
 })
 
