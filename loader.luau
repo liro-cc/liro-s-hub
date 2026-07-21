@@ -3,7 +3,7 @@
 local HttpGet = game.HttpGet
 local GameId: number = game.GameId
 
-local BASE = "https://raw.githubusercontent.com/liro-cc/liro-s-hub/5e3b75ea714cbd0bec5edb8991d7959f9471892b"
+local BASE = "https://raw.githubusercontent.com/liro-cc/liro-s-hub/c91c3fdb9030cb3ad1048f146542d17f4a6521e7"
 
 local function fetch(url: string): string?
 	local ok, result = pcall(HttpGet, game, url)
