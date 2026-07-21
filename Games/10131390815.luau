@@ -44,7 +44,7 @@ local Coins = {
 }
 local Event = game:GetService("ReplicatedStorage").Assets.Events.CoinLanded
 local selectedCoin = Coins[1]
-local time = 1
+local seconds = 1
 local toggle = false
 
 local CoinDropdown = Tab:CreateDropdown({
@@ -56,30 +56,32 @@ local CoinDropdown = Tab:CreateDropdown({
    end
 })
 
-local TimeSlider = Tab:CreateSlider({
-   Name = "Time",
+local SecondsSlider = Tab:CreateSlider({
+   Name = "Seconds",
    Range = {0.1, 5},
    Increment = 0.1,
    Default = 1,
    Callback = function(v)
-      time = v
+      seconds = v
    end
 })
 
-Tab:CreateToggle({
+local Toggle = Tab:CreateToggle({
    Name = "Toggle",
-   Default = false,
-   Callback = function(v)
-      toggle = v
-      if v then
-         task.spawn(function()
-            while toggle do
-               Event:FireServer(3, Vector3.new(0, 0, 0), selectedCoin, nil, nil)
-               wait(time)
-            end
-         end)
-      end
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+      toggle = Value
    end
 })
+
+task.spawn(function()
+   while true do
+      if toggle then
+         Event:FireServer(3, Vector3.new(0, 0, 0), selectedCoin, nil, nil)
+      end
+      wait(seconds)
+   end
+end)
 
 Rayfield:LoadConfiguration()
