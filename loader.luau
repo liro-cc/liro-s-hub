@@ -36,7 +36,9 @@ if not code then
 	return
 end
 
-local ok, _ = pcall(loadstring, code)
-if not ok then
+local ok, fn = pcall(loadstring, code)
+if not ok or type(fn) ~= "function" then
 	warn("[Loader] Failed to load game script")
+	return
 end
+pcall(fn)
