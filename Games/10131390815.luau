@@ -32,12 +32,21 @@ local Window = Rayfield:CreateWindow({
 })
 
 local Tab = Window:CreateTab("Coin Thrower", 4483362458)
-
 local Section = Tab:CreateSection("Settings")
 
-local Coins = {"Sapphire Coin", "Gold Coin", "Silver Coin", "Bronze Coin", "Diamond Coin", "Ruby Coin", "Emerald Coin", "Amethyst Coin", "Platinum Coin"}
+local Coins = {
+   "Fortune Coin", "Ruby Coin", "Copper Coin", "Basic Coin",
+   "Volt Coin", "Void Coin", "Starlight Coin", "Sapphire Coin",
+   "Prism Coin", "Galaxy Coin", "Fire Coin", "Eclipse Coin",
+   "Crimson Coin", "Chronos Coin", "Aether Coin", "Eclipse Coin",
+   "Mirage Coin", "Paradox Coin", "Obsidian Coin", "Tempest Coin",
+   "Miracle Coin", "Soul Coin", "Nexus Coin", "Infinity Coin", "Apex Coin"
+}
 local CoinLanded = game:GetService("ReplicatedStorage").Assets.Events.CoinLanded
 local selectedCoin = Coins[1]
+local studs = 3
+local throwDelay = 1
+local autoThrow = false
 
 local CoinDropdown = Tab:CreateDropdown({
    Name = "Coin Type",
@@ -48,16 +57,23 @@ local CoinDropdown = Tab:CreateDropdown({
    end
 })
 
-local autoThrow = false
-local delay = 1
+local StudsSlider = Tab:CreateSlider({
+   Name = "Distance (studs)",
+   Range = {1, 100},
+   Increment = 1,
+   Default = 3,
+   Callback = function(v)
+      studs = v
+   end
+})
 
 local DelaySlider = Tab:CreateSlider({
-   Name = "Delay (s)",
+   Name = "Auto Throw Delay (s)",
    Range = {0.1, 5},
    Increment = 0.1,
    Default = 1,
    Callback = function(v)
-      delay = v
+      throwDelay = v
    end
 })
 
@@ -69,8 +85,8 @@ local AutoToggle = Tab:CreateToggle({
       if v then
          task.spawn(function()
             while autoThrow do
-               CoinLanded:FireServer(3, Vector3.new(0, 0, 0), selectedCoin)
-               task.wait(delay)
+               CoinLanded:FireServer(studs, Vector3.new(0, 0, 0), selectedCoin)
+               task.wait(throwDelay)
             end
          end)
       end
