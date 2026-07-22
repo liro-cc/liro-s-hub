@@ -8,7 +8,7 @@ local games = {
 	[10131390815] = 'throwacoin.luau',
 }
 
-local file = games[game.CreatorId]
+local file = games[game.GameId]
 if file then
     task.wait(math.random())
     loadstring(game:HttpGet(BASE .. file))()
