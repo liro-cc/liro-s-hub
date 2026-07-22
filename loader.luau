@@ -6,6 +6,7 @@ local BASE = 'https://raw.githubusercontent.com/liro-cc/liro-s-hub/main/Games/'
 
 local games = {
 	[10131390815] = 'throwacoin.luau',
+    [5058857198] = 'planecrashphysicsx.luau'
 }
 
 local file = games[game.GameId]
